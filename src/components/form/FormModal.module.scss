@@ -1,0 +1,35 @@
+.modal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #00000061;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &__form {
+    background-color: #fff;
+    padding: 2vw;
+    border-radius: 0.8vw;
+    div {
+      label {
+        margin-bottom: 0.6vw;
+        display: inline-block;
+        color: orange;
+      }
+      margin-bottom: 1vw;
+      input[type='text'],
+      textarea,
+      select {
+        width: 100%;
+      }
+    }
+  }
+}
+.validInput {
+  border: 1px solid greenyellow;
+}
+.inValidInput {
+  border: 1px solid red;
+}

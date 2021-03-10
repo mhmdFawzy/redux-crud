@@ -1,0 +1,34 @@
+.main {
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  font-family: sans-serif;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1vw 1.5vw;
+  border-bottom: 2px solid #00000080;
+}
+.btn {
+  display: inline-block;
+  outline: none;
+  border: 1px solid #000;
+  border-radius: 0.8vw;
+  background-color: transparent;
+  margin: 0.2vw 0;
+  cursor: pointer;
+  &--large {
+    padding: 0.2rem 1.5rem;
+  }
+}
+small {
+  color: #a79e9e;
+}
+.block {
+  display: block;
+}
+
+.w-100 {
+  width: 100%;
+}

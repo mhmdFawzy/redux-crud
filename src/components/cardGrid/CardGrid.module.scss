@@ -1,0 +1,26 @@
+.cardgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(33%, 0.5fr));
+  &__card {
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 1vw;
+    flex-wrap: nowrap;
+    border: 2px solid #a79e9e;
+    margin: 0.2vw;
+    border-radius: 0.8vw;
+    h2,
+    p {
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+    }
+    img {
+      width: 150px;
+      height: auto;
+    }
+  }
+}
