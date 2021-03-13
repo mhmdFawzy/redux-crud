@@ -6,16 +6,16 @@ import styles from './CardGrid.module.scss';
 function CardGrid({ items }) {
   return (
     <section className={styles.cardgrid}>
-      {items?.length > 0 ? (
-        items.map(card => {
+      {items && Object.keys(items).length !== 0 && items.constructor === Object ? (
+        Object.values(items).map(card => {
           return (
             <Card
               style={styles.cardgrid__card}
               key={uuidv4()}
               id={card.id}
-              title={card.name}
-              description={card.description}
-              img={card.itemImage}
+              title={card.Name}
+              description={card.Description}
+              img={card.ItemImgUrl}
             />
           );
         })
@@ -26,6 +26,6 @@ function CardGrid({ items }) {
   );
 }
 CardGrid.propTypes = {
-  items: propTypes.array.isRequired,
+  items: propTypes.object.isRequired,
 };
 export default React.memo(CardGrid);

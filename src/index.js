@@ -3,7 +3,7 @@ import './styles/main.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './App';
+import App from './components/app';
 import store from './redux/store';
 import { Provider } from 'react-redux';
 

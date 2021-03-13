@@ -1,14 +1,42 @@
 import React from 'react';
 import styles from './FormModal.module.scss';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { clearCurrentItem } from './../../redux/actions/items';
-// import { modalToggle } from './../../redux/actions/modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, editItem } from './../../redux/actions/items';
+import { modalToggle } from '../../redux/actions/modal';
+import { uploadImg } from './formHandlers';
+import { clearCurrentItem } from './../../redux/actions/items';
 import { useForm } from 'react-hook-form';
 
 function Form(props, ref) {
-  const { register, handleSubmit, errors } = useForm();
-  const onSubmit = data => console.log(data);
-  console.log(errors);
+  const [update, setUpdate] = React.useState(false);
+  const { register, handleSubmit, errors, setValue, getValues } = useForm({ mode: 'onTouched' });
+  const dispatch = useDispatch();
+  const {
+    items: { currentItem },
+  } = useSelector(state => state);
+  const onSubmit = data => {
+    const { ItemImg, ...reduxData } = data;
+    dispatch(addItem(reduxData));
+    dispatch(modalToggle());
+  };
+  React.useEffect(() => {
+    ref.current.children[0][0].focus();
+  }, []);
+  React.useEffect(() => {
+    if (
+      currentItem &&
+      Object.keys(currentItem).length !== 0 &&
+      currentItem.constructor === Object
+    ) {
+      [
+        { name: 'Name', value: currentItem.Name },
+        { name: 'Description', value: currentItem.Description },
+        { name: 'inStock', value: currentItem.inStock },
+        { name: 'Categories', value: currentItem.Categories },
+      ].forEach(({ name, value }) => setValue(name, value));
+      setUpdate(true);
+    }
+  }, [currentItem]);
 
   return (
     <div className={styles.modal} ref={ref}>
@@ -87,8 +115,30 @@ function Form(props, ref) {
             <p className={styles.modal__form__error}>This field is required</p>
           )}
         </div>
-
-        <input type="submit" />
+        <div>
+          <input
+            ref={register({ required: true })}
+            type="file"
+            name="ItemImg"
+            onChange={e => {
+              uploadImg(e, setValue);
+            }}
+          />
+          <input ref={register({ required: true })} type="hidden" name="ItemImgUrl" />
+        </div>
+        {update ? (
+          <button
+            onClick={e => {
+              e.preventDefault();
+              dispatch(editItem(getValues(), currentItem.id));
+              dispatch(clearCurrentItem());
+              dispatch(modalToggle());
+            }}>
+            Update
+          </button>
+        ) : (
+          <button>Submit</button>
+        )}
       </form>
     </div>
   );
