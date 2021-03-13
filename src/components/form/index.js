@@ -1,191 +1,96 @@
 import React from 'react';
 import styles from './FormModal.module.scss';
-import FormInput from './FormInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearCurrentItem } from './../../redux/actions/items';
-import { modalToggle } from './../../redux/actions/modal';
-import { formSubmitHandler, changeHandler } from './formHandlers';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { clearCurrentItem } from './../../redux/actions/items';
+// import { modalToggle } from './../../redux/actions/modal';
+import { useForm } from 'react-hook-form';
+
 function Form(props, ref) {
-  const dispatch = useDispatch();
-  const {
-    items: { currentItem },
-  } = useSelector(state => state);
-  const [formData, setFormData] = React.useState({
-    update: false,
-    formIsValid: false,
-    formControls: {
-      name: {
-        inputAttr: { value: '', placeholder: 'What is the name', valid: false, touched: false },
-        validationRules: {
-          minLength: 4,
-          isRequired: true,
-        },
-      },
-      description: {
-        inputAttr: {
-          value: '',
-          placeholder: 'What is the description',
-          valid: false,
-          touched: false,
-        },
-        validationRules: {
-          minLength: 30,
-          isRequired: true,
-        },
-      },
-      inStock: {
-        inputAttr: { value: '', valid: false, touched: false },
-        validationRules: {
-          isRequired: true,
-        },
-        options: [
-          { value: '1', displayValue: 'In Stock' },
-          { value: '0', displayValue: 'Out of Stock' },
-        ],
-      },
-      categories: {
-        inputAttr: { value: '', placeholder: 'Select Categories', valid: false, touched: false },
-        validationRules: {
-          isRequired: true,
-        },
-        options: [
-          { value: '', displayValue: 'Select one', disable: true },
-          { value: 'G2K', displayValue: 'G2K' },
-          { value: 'K2G', displayValue: 'K2G' },
-        ],
-      },
-      itemImage: {
-        type: 'imageUpload',
-        inputAttr: { value: '', valid: false, touched: false },
-        validationRules: {
-          isRequired: true,
-        },
-      },
-    },
-  });
-  const formDataCopy = { ...formData.formControls };
-  const formKeys = Object.keys(formDataCopy);
-  const [{ name }, { description }, { inStock }, { categories }, { itemImage }] = formKeys.map(
-    key => {
-      return {
-        [key]: {
-          ...formDataCopy[key],
-          inputAttr: {
-            ...formDataCopy[key].inputAttr,
-            value: currentItem[key],
-            valid: true,
-          },
-        },
-      };
-    }
-  );
-  React.useEffect(() => {
-    if (
-      currentItem &&
-      Object.keys(currentItem).length !== 0 &&
-      currentItem.constructor === Object
-    ) {
-      setFormData({
-        update: true,
-        formControls: {
-          ...formDataCopy,
-          name,
-          description,
-          inStock,
-          categories,
-          itemImage,
-        },
-        formIsValid: true,
-      });
-    }
-  }, [formData.update, currentItem]);
-  React.useEffect(() => {
-    ref.current.children[0][0].focus();
-    return () => {};
-  }, []);
+  const { register, handleSubmit, errors } = useForm();
+  const onSubmit = data => console.log(data);
+  console.log(errors);
 
   return (
     <div className={styles.modal} ref={ref}>
-      <form className={styles.modal__form}>
-        <FormInput
-          {...formData.formControls.name.inputAttr}
-          id="name"
-          type="text"
-          name="name"
-          onChange={event => {
-            changeHandler(event, formData, setFormData);
-          }}
-        />
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.modal__form}>
+        <div>
+          <label htmlFor="Name">Name</label>
+          <input
+            type="text"
+            placeholder="Name"
+            name="Name"
+            id="Name"
+            ref={register({ required: true, minLength: 4, maxLength: 80 })}
+          />
+          <small>Must be 4 char at least </small>
+          {errors?.Name?.type === 'required' && (
+            <p className={styles.modal__form__error}>This field is required</p>
+          )}
+          {errors?.Name?.type === 'minLength' && (
+            <p className={styles.modal__form__error}>This field must be more than 4 char</p>
+          )}
+        </div>
+        <div>
+          <label htmlFor="Description">Description</label>
+          <textarea
+            name="Description"
+            id="Description"
+            ref={register({ required: true, minLength: 30, maxLength: 150 })}
+          />
+          <small>Must be 30 char at least </small>
+          {errors?.Description?.type === 'required' && (
+            <p className={styles.modal__form__error}>This field is required</p>
+          )}
+          {errors?.Description?.type === 'minLength' && (
+            <p className={styles.modal__form__error}>This field must be more than 30 char</p>
+          )}
+        </div>
+        <div>
+          <div className={styles.modal__form__radio}>
+            <input
+              id="avaliable"
+              name="inStock"
+              type="radio"
+              value="Yes"
+              ref={register({ required: true })}
+            />
+            <label htmlFor="avaliable">Avaliable</label>
+          </div>
+          <div className={styles.modal__form__radio}>
+            <input
+              id="notavaliable"
+              name="inStock"
+              type="radio"
+              value="No"
+              ref={register({ required: true })}
+            />
+            <label htmlFor="notavaliable">Not avaliable</label>
+          </div>
+          {errors?.inStock?.type === 'required' && (
+            <p className={styles.modal__form__error}>This field is required</p>
+          )}
+        </div>
+        <div>
+          <label htmlFor="Categories">Categories</label>
+          <select
+            name="Categories"
+            id="Categories"
+            ref={register({ required: true })}
+            defaultValue="">
+            <option value="" disabled>
+              Select one
+            </option>
+            <option value="G2K">G2K</option>
+            <option value="K2G">K2G</option>
+          </select>
+          {errors?.Categories?.type === 'required' && (
+            <p className={styles.modal__form__error}>This field is required</p>
+          )}
+        </div>
 
-        <FormInput
-          {...formData.formControls.description.inputAttr}
-          type="textArea"
-          id="description"
-          name="description"
-          onChange={event => {
-            changeHandler(event, formData, setFormData);
-          }}
-        />
-
-        <FormInput
-          {...formData.formControls.categories.inputAttr}
-          type="select"
-          id="categories"
-          name="categories"
-          onChange={event => {
-            changeHandler(event, formData, setFormData);
-          }}
-          options={formData.formControls.categories.options}
-        />
-
-        <FormInput
-          {...formData.formControls.inStock.inputAttr}
-          type="radio"
-          name="inStock"
-          onChange={event => {
-            changeHandler(event, formData, setFormData);
-          }}
-          options={formData.formControls.inStock.options}
-        />
-        <FormInput
-          {...formData.formControls.itemImage.inputAttr}
-          type="image"
-          name="itemImage"
-          onChange={event => {
-            changeHandler(event, formData, setFormData);
-          }}
-        />
-        {!formData.update ? (
-          <button
-            onClick={event => {
-              event.preventDefault();
-              formSubmitHandler(formData, dispatch);
-            }}
-            disabled={!formData.formIsValid}>
-            Submit
-          </button>
-        ) : (
-          <button
-            onClick={event => {
-              event.preventDefault();
-              formSubmitHandler(formData, dispatch, currentItem.id);
-              dispatch(clearCurrentItem());
-            }}
-            disabled={!formData.formIsValid}>
-            Update
-          </button>
-        )}
+        <input type="submit" />
       </form>
-      <button
-        className="btn"
-        onClick={() => {
-          dispatch(modalToggle());
-          formData.update ? dispatch(clearCurrentItem()) : '';
-        }}>
-        x
-      </button>
     </div>
   );
 }
-
 export default React.forwardRef(Form);
