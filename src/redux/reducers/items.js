@@ -1,4 +1,4 @@
-import { ADD_ITEM, EDIT_ITEM, DELETE_ITEM, SET_CURRENT_ITEM, CLEAR_CURRENT_ITEM } from '../types';
+import { ADD_ITEM, CLEAR_CURRENT_ITEM, DELETE_ITEM, EDIT_ITEM, SET_CURRENT_ITEM } from '../types';
 
 const initialState = { itemsById: {}, itemdIds: [], currentItem: {} };
 

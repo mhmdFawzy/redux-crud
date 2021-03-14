@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { deleteItem, setCurrentItem } from './../../redux/actions/items';
 function Card({ title, description, img, id, style }) {
   const dispatch = useDispatch();
-
   return (
     <div id={id} className={style}>
       <div>

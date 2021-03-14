@@ -1,10 +1,10 @@
-import React from 'react';
-import styles from './FormModal.module.scss';
+import { addItem, clearCurrentItem, editItem } from './../../redux/actions/items';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, editItem } from './../../redux/actions/items';
+
+import React from 'react';
 import { modalToggle } from '../../redux/actions/modal';
+import styles from './FormModal.module.scss';
 import { uploadImg } from './formHandlers';
-import { clearCurrentItem } from './../../redux/actions/items';
 import { useForm } from 'react-hook-form';
 
 function Form(props, ref) {
@@ -15,8 +15,7 @@ function Form(props, ref) {
     items: { currentItem },
   } = useSelector(state => state);
   const onSubmit = data => {
-    const { ItemImg, ...reduxData } = data;
-    dispatch(addItem(reduxData));
+    dispatch(addItem(data));
     dispatch(modalToggle());
   };
   React.useEffect(() => {
@@ -33,6 +32,8 @@ function Form(props, ref) {
         { name: 'Description', value: currentItem.Description },
         { name: 'inStock', value: currentItem.inStock },
         { name: 'Categories', value: currentItem.Categories },
+        { name: 'ItemImg', value: currentItem.ItemImg },
+        { name: 'ItemImgUrl', value: currentItem.ItemImgUrl },
       ].forEach(({ name, value }) => setValue(name, value));
       setUpdate(true);
     }
@@ -131,7 +132,6 @@ function Form(props, ref) {
             onClick={e => {
               e.preventDefault();
               dispatch(editItem(getValues(), currentItem.id));
-              dispatch(clearCurrentItem());
               dispatch(modalToggle());
             }}>
             Update

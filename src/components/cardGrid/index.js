@@ -1,8 +1,8 @@
-import React from 'react';
 import Card from './Card';
+import React from 'react';
 import propTypes from 'prop-types';
-import { v4 as uuidv4 } from 'uuid';
 import styles from './CardGrid.module.scss';
+import { v4 as uuidv4 } from 'uuid';
 function CardGrid({ items }) {
   return (
     <section className={styles.cardgrid}>
