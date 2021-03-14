@@ -1,6 +1,6 @@
 import { ADD_ITEM, CLEAR_CURRENT_ITEM, DELETE_ITEM, EDIT_ITEM, SET_CURRENT_ITEM } from '../types';
 
-const initialState = { itemsById: {}, itemdIds: [], currentItem: {} };
+const initialState = { itemsById: {}, itemIds: [], currentItem: {} };
 
 export default function itemsReducer(state = initialState, action) {
   const id = action?.payload?.id;
@@ -10,7 +10,7 @@ export default function itemsReducer(state = initialState, action) {
       return {
         ...state,
         itemsById: { ...state.itemsById, [id]: action.payload },
-        itemdIds: [...state.itemdIds, id],
+        itemIds: [...state.itemIds, id],
       };
     }
     case SET_CURRENT_ITEM: {
@@ -43,7 +43,7 @@ export default function itemsReducer(state = initialState, action) {
       return {
         ...state,
         itemsById: modifiedObj,
-        itemdIds: state.itemdIds.filter(item => item !== id),
+        itemIds: state.itemIds.filter(item => item !== id),
       };
     }
     default:
