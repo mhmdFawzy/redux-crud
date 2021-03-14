@@ -125,6 +125,9 @@ function Form(props, ref) {
               uploadImg(e, setValue);
             }}
           />
+          {errors?.ItemImg?.type === 'required' && (
+            <p className={styles.modal__form__error}>This field is required</p>
+          )}
           <input ref={register({ required: true })} type="hidden" name="ItemImgUrl" />
         </div>
         {update ? (
