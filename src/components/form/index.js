@@ -135,6 +135,7 @@ function Form(props, ref) {
             onClick={e => {
               e.preventDefault();
               dispatch(editItem(getValues(), currentItem.id));
+              dispatch(clearCurrentItem());
               dispatch(modalToggle());
             }}>
             Update
